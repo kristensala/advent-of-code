@@ -1,2 +1,2 @@
 # advent-of-code
-Learning Go
+Learning Go and maybe Rust
