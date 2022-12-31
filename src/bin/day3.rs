@@ -1,11 +1,12 @@
 
 fn main() {
-    // a code is 141 and b is 142. I could use that (a = code(141) - 140) 
-    let rucksacks: Vec<&str> = include_str!("../../input/input3.test")
+    let rucksacks: Vec<&str> = include_str!("../../input/input3.prod")
         .lines()
         .collect();
 
-    let mut total: i32 = 0;
+    let alphabet: &str = "abcdefghijklmnopqrstuvwxyz";
+    let mut list: Vec<char> = Vec::new();
+
     for rucksack in rucksacks {
         let (comp1, comp2) = rucksack.split_at(rucksack.len() / 2);
         
@@ -17,15 +18,20 @@ fn main() {
                 .contains(x))
             .collect();
 
-        items.sort(); // using dedup requires us to sort the array. Don't really need it in here bc
-        // each array only contains same letters, but in other cases dedup won't do what needed.
-        
-        items.dedup(); // removes consecutive unique values in list except the first one
-        
-        // TODO: get item value and sum them
-
-        println!("{:?}", items);
+        items.sort();
+        items.dedup();
+        list.push(items[0]);
     }
 
-    println!("{}", total);
+    let result: usize = list.iter_mut()
+        .map(|&mut x| {
+            if x.is_uppercase() {
+                let lower: Vec<char> = x.to_lowercase().collect();
+                return alphabet.find(lower[0]).unwrap() + 27;
+            }
+            return alphabet.find(x).unwrap() + 1;
+        })
+        .sum();
+
+    println!("{}", result)
 }
