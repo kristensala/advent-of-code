@@ -6,17 +6,23 @@ fn main() {
         .collect();
 
     let mut count: i32 = 0;
+    let mut part_two_count: i32 = 0;
     for section in sections {
         let assignment_one = get_assignment_range(section[0]);
         let assignment_two = get_assignment_range(section[1]);
 
-        if are_assignments_overlapping(assignment_one, assignment_two) {
+        if are_assignments_overlapping(assignment_one.clone(), assignment_two.clone()) {
             count += 1;
+        }
+
+        if have_similar_assignments(assignment_one, assignment_two) {
+            part_two_count += 1;
         }
          
     }
 
     println!("{}", count);
+    println!("{}", part_two_count);
 }
 
 fn get_assignment_range(assignment: &str) -> Vec<i32> {
@@ -60,3 +66,8 @@ fn are_assignments_overlapping(assignment_one: Vec<i32>, assignment_two: Vec<i32
     return false;
 }
 
+fn have_similar_assignments(assignment_one: Vec<i32>, assignment_two: Vec<i32>) -> bool {
+    let result: Vec<i32> = assignment_one.into_iter()
+        .filter(|x| assignment_two.contains(x)).collect();
+    return result.len() > 0;
+}
