@@ -119,7 +119,7 @@ fn rearrange(list: Vec<Stack>, mov: Move) -> Vec<Stack> {
 
     // get crates to move
     let from_crates = from_stack.crates.clone();
-    let crates_to_move: Vec<char> = from_crates[from_crates.len() - mov.amount as usize..].iter().rev().cloned().collect();
+    let crates_to_move: Vec<char> = from_crates[from_crates.len() - mov.amount as usize..].iter().cloned().collect();
 
     // build new from stack
     let new_from_stack = Stack {
