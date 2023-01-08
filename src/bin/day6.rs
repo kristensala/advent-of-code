@@ -5,7 +5,7 @@ fn main() {
 
     let mut res = 0;
     for (i, _) in arr.iter().enumerate() {
-        let end = i + 4;
+        let end = i + 14;
         let result: Vec<u32> = arr[i..end].iter() // i am missing the out of bounds check, but got
             // the right anwser anyway
             .map(|x| {
