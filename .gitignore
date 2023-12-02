@@ -15,5 +15,9 @@
 # vendor/
 
 target/
-bin/
 debug/
+
+
+# Added by cargo
+
+/target
