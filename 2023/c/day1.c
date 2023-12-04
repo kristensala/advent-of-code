@@ -1,102 +1,58 @@
 #include <ctype.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define STR_LEN 80
+#define STR_LEN 200
+#define BUFSIZE 32*1024
 
-typedef struct NumberType {
-    char name[10];
-    int value;
-} numberType;
+void partOne(char *input, size_t inputLength) {
+    int result = 0;
 
-int parseSpelledNumbers(char *line) {
-    numberType nOne, nTwo, nThree, nFour, nFive, nSix, nSeven, nEight, nNine;
-    strcpy(nOne.name, "one");
-    nOne.value = 1;
+    char firstDigit = '\0';
+    char lastDigit = '\0';
 
-    strcpy(nTwo.name, "two");
-    nOne.value = 2;
+    for (int i = 0; i < inputLength; i++) {
+        char character = input[i];
 
-    strcpy(nThree.name, "three");
-    nOne.value = 3;
+        if (character == '\n') {
 
-    strcpy(nFour.name, "four");
-    nOne.value = 4;
+            char *number;
+            number = malloc(2 + 1);
+            strcpy(number, &firstDigit);
+            strcat(number, &lastDigit);
 
-    strcpy(nFive.name, "five");
-    nOne.value = 5;
+            result += atoi(number);
+            free(number);
 
-    strcpy(nSix.name, "six");
-    nOne.value = 6;
+            firstDigit = '\0';
+            lastDigit = '\0';
+            continue;
+        }
 
-    strcpy(nSeven.name, "seven");
-    nOne.value = 7;
+        if (isdigit(character)) {
+            if (firstDigit == '\0') {
+                firstDigit = character;
+            }
 
-    strcpy(nEight.name, "eight");
-    nOne.value = 8;
-
-    strcpy(nNine.name, "nine");
-    nOne.value = 9;
-
-    numberType numberList[9] = {nOne, nTwo, nThree, nFour, nFive, nSix, nSeven, nEight, nNine};
-
-
-    //TODO:
-    for (int i = 3; i < strlen(line); i++) {
-        for (int j = 0; j < 9; j++) {
+            lastDigit = character;
         }
     }
 
-    return 0;
+    printf("Part One: %i", result);
+    
 }
 
-int main(void)
-{
-
-    FILE *fp = fopen("../c/inputs/day1-2.test", "r");
-    if (fp == NULL) {
-        exit(EXIT_FAILURE);
-    }
-
-    // +1 is a commont practice among C devs
-    // Becuse every string is terminated by a null character,
-    // meaning that if there is no room for the null char
-    // then it may cause unpredictable results
-    //
-    // Strings are null terminated??? (don't know what that means)
-    char line[STR_LEN + 1];
-    char nrString[200];
-
-    int resultPart1;
-    int resultPart2;
-
-    while (fgets(line, sizeof(line), fp)) {
-        parseSpelledNumbers(line);
-
-        int pos = 0;
-        for(int i = 0; i < strlen(line); i++) {
-            char t = line[i];
-
-            if (isdigit(t) && !isspace(t)) {
-                pos += sprintf(&nrString[pos], "%c", t);
-            }
-
-            if (i == strlen(line) - 1 && strlen(nrString) > 0) {
-                char buffer[30];
-                sprintf(buffer, "%c%c", nrString[0], nrString[strlen(nrString) - 1]);
-                resultPart1 += atoi(buffer);
-                //printf("number to calc with %s\n", buffer);
-            }
-        }
-
-//        printf("result: %s", nrString);
-
-    }
-
-    printf("Result part 1: %d", resultPart1);
-
+int main(void) {
+    char input[BUFSIZE];
+    FILE *fp = fopen("./inputs/day1-1.prod", "r");
+    size_t inputLen = fread(input, 1, BUFSIZE, fp);
     fclose(fp);
+    
+    partOne(input, inputLen);
 
     return 0;
 }
+
+
