@@ -90,7 +90,8 @@ void getNumber(indexer *indexer, int pos, char *string) {
 
 void partTwo(char *input, size_t inputLength) {
     int result = 0;
-    char *numbers = malloc(999);
+    char *numbers = malloc(32 * 1024 + 1);
+
     if (numbers == NULL) {
         printf("failed to allocate memory for numbers");
         exit(-1);
@@ -103,20 +104,19 @@ void partTwo(char *input, size_t inputLength) {
             // TODO: I do not know what is happening here
             // Getting characters mixed with numbers, but should not
             printf("NUMBERS: %s \n", numbers);
-
             strcpy(numbers, "\0");
 
             continue;
         }
 
         if (isdigit(character)) {
-            strcat(numbers, &character);
+            strcat(numbers, &character); // this is no bueno getting values like 3L, 2K etc etc
         } else {
             indexer indexer;
             indexer.value = '0';
             indexer.pos = 0;
 
-            char *sub = malloc(6);
+            char *sub = malloc(6 * sizeof(char));
             if (sub == NULL) {
                 printf("Failed to allocate memory for substring");
                 exit(-1);
@@ -148,7 +148,7 @@ void translateTest(char *input, size_t inputLength) {
         indexer.value = '0';
         indexer.pos = 0;
 
-        char *sub = malloc(6);
+        char *sub = malloc(6 * sizeof(char));
         substring(sub, input, i, wordLength);
 
         int pos = 0;
