@@ -1,0 +1,13 @@
+/snap/clion/260/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/260/bin/ninja/linux/x64/ninja -G Ninja -S /home/salakris/Documents/personal/dev/advent-of-code/2023/aoc -B /home/salakris/Documents/personal/dev/advent-of-code/2023/aoc/cmake-build-debug
+-- The C compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+CMake Error: File /home/salakris/Documents/personal/dev/advent-of-code/2023/aoc/inputs/day2-1.test does not exist.
+CMake Error at CMakeLists.txt:6 (configure_file):
+  configure_file Problem configuring file
+
+
+-- Configuring incomplete, errors occurred!
