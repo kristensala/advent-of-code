@@ -1,4 +1,4 @@
-use std::{fs};
+use std::fs;
 
 #[derive(Debug)]
 struct Set {
@@ -21,18 +21,18 @@ fn main() {
         Ok(value) => {
             let lines: Vec<String> = value.lines().map(String::from).collect();
             part_one(&lines);
+            part_two(&lines)
         }
     };
 }
 
 fn part_one(lines: &Vec<String>) {
-    let games = parse_game(lines);
-
     let red_limit = 12;
     let blue_limit = 14;
     let green_limit = 13;
 
     let mut result = 0;
+    let games = parse_game(lines);
 
     games.iter().for_each(|game|{
         let mut is_valid_game = true;
@@ -44,12 +44,41 @@ fn part_one(lines: &Vec<String>) {
         }
 
         if is_valid_game {
-            result += game.id.parse::<i32>().unwrap()
+            result += game.id.parse::<i32>().expect("We expect aoc input to be correct")
         }
     });
 
-    //println!("{:#?}", games);
-    println!("{}", result);
+    println!("Part one answer: {}", result);
+}
+
+fn part_two(lines: &Vec<String>) {
+    let mut result = 0;
+
+    let parsed_games = parse_game(lines);
+    parsed_games.iter().for_each(|game| {
+        let mut min_blue = 0;
+        let mut min_green = 0;
+        let mut min_red = 0;
+
+        for set in &game.sets {
+            if set.green > min_green {
+                min_green = set.green;
+            }
+
+            if set.blue > min_blue {
+                min_blue = set.blue
+            }
+
+            if set.red > min_red {
+                min_red = set.red;
+            }
+        }
+
+        let power = min_red * min_green * min_blue;
+        result += power;
+    });
+
+    println!("Part two result: {}", result);
 }
 
 fn parse_game(lines: &Vec<String>) -> Vec<Game> {
@@ -72,6 +101,7 @@ fn parse_game(lines: &Vec<String>) -> Vec<Game> {
                 green: 0,
                 red: 0,
             };
+
             let cubes: Vec<&str> = set.split(",").collect();
             cubes.iter().for_each(|&x| {
                 let c: Vec<&str> = x.split(" ").collect();
