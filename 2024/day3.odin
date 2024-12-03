@@ -7,7 +7,7 @@ import "core:os"
 import "core:text/regex"
 
 main :: proc() {
-    byte_data, ok := os.read_entire_file("./input/day3.test", context.allocator)
+    byte_data, ok := os.read_entire_file("./input/day3.prod", context.allocator)
 
     if !ok {
         fmt.print("Could not read the file!")
@@ -23,7 +23,7 @@ main :: proc() {
 
     for line in strings.split_lines_iterator(&data) {
         //filter_multiplications(line, &array)
-        part_two(line)
+        part_two(line, &array)
     }
 
     part_one_result: int
@@ -34,7 +34,7 @@ main :: proc() {
     fmt.println(part_one_result)
 }
 
-part_two :: proc(corrupt_line: string) {
+part_two :: proc(corrupt_line: string, array: ^[dynamic]int) {
     do_regex, do_err := regex.create_by_user(`/do\(\)/g`)
     if do_err != nil {
         fmt.println(do_err)
@@ -48,18 +48,34 @@ part_two :: proc(corrupt_line: string) {
     }
 
     do_regex_result, do_ok := regex.match_and_allocate_capture(do_regex, corrupt_line) 
-    if !do_ok { 
-        return 
-    }
-
     dont_regex_result, dont_ok := regex.match_and_allocate_capture(dont_regex, corrupt_line) 
-    if !dont_ok { 
-        return 
+
+    if !dont_ok || (!dont_ok && !do_ok) {
+        filter_multiplications(corrupt_line, array)
+        return
     }
 
-    fmt.println(do_regex_result)
-    fmt.println(dont_regex_result)
+    if dont_regex_result.pos[0][0] < do_regex_result.pos[0][0] {
+        new_line, ok := strings.replace(corrupt_line, corrupt_line[dont_regex_result.pos[0][0]:do_regex_result.pos[0][1]], "", 1)
+        if !ok {
+            filter_multiplications(new_line, array)
+            return
+        }
+
+        fmt.println(new_line);
+        part_two(new_line, array)
+
+    } else {
+        replaced_do, is_ok := strings.replace(corrupt_line, corrupt_line[do_regex_result.pos[0][0]:do_regex_result.pos[0][1]], "", 1)
+        if !is_ok {
+            filter_multiplications(replaced_do, array)
+            return;
+        }
+
+        part_two(replaced_do, array)
+    }
 }
+
 
 filter_multiplications :: proc(corrupt_line: string, array: ^[dynamic]int) {
     reg, err := regex.create_by_user(`/mul\(\d+,\d+\)/g`)
