@@ -34,6 +34,7 @@ main :: proc() {
     fmt.println(part_one_result)
 }
 
+@(private="file")
 part_two :: proc(corrupt_line: string, array: ^[dynamic]int) {
     do_regex, do_err := regex.create_by_user(`/do\(\)/g`)
     if do_err != nil {
@@ -56,17 +57,28 @@ part_two :: proc(corrupt_line: string, array: ^[dynamic]int) {
     }
 
     if dont_regex_result.pos[0][0] < do_regex_result.pos[0][0] {
-        new_line, ok := strings.replace(corrupt_line, corrupt_line[dont_regex_result.pos[0][0]:do_regex_result.pos[0][1]], "", 1)
+        new_line, ok := strings.replace(
+            corrupt_line,
+            corrupt_line[dont_regex_result.pos[0][0]:do_regex_result.pos[0][1]],
+            "", 
+            1
+        )
+
         if !ok {
             filter_multiplications(new_line, array)
             return
         }
 
-        fmt.println(new_line);
         part_two(new_line, array)
 
     } else {
-        replaced_do, is_ok := strings.replace(corrupt_line, corrupt_line[do_regex_result.pos[0][0]:do_regex_result.pos[0][1]], "", 1)
+        replaced_do, is_ok := strings.replace(
+            corrupt_line,
+            corrupt_line[do_regex_result.pos[0][0]:do_regex_result.pos[0][1]],
+            "",
+            1
+        )
+
         if !is_ok {
             filter_multiplications(replaced_do, array)
             return;
@@ -76,7 +88,7 @@ part_two :: proc(corrupt_line: string, array: ^[dynamic]int) {
     }
 }
 
-
+@(private="file")
 filter_multiplications :: proc(corrupt_line: string, array: ^[dynamic]int) {
     reg, err := regex.create_by_user(`/mul\(\d+,\d+\)/g`)
     if err != nil {
