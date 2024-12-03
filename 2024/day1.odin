@@ -46,6 +46,7 @@ main :: proc() {
     fmt.println(result_two)
 }
 
+@(private="file")
 part_two :: proc(left_list: [dynamic]int, right_list: [dynamic]int) -> int {
     occurence: int
     part_two_result: int

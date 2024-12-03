@@ -17,10 +17,9 @@ main :: proc() {
     defer delete(byte_data, context.allocator)
     data := string(byte_data)
 
-
     safe_count := 0;
-
     report: [dynamic]int
+
     for line in strings.split_lines_iterator(&data) {
         report_str := strings.split(line, " ")
 
@@ -42,6 +41,7 @@ main :: proc() {
     fmt.println(safe_count)
 }
 
+@(private="file")
 try_dampen :: proc(unsafe_report: [dynamic]int) -> bool {
     for i := 0; i <= len(unsafe_report) - 1; i += 1 {
         array_copy := make([dynamic]int, len(unsafe_report), cap(unsafe_report))
@@ -57,6 +57,7 @@ try_dampen :: proc(unsafe_report: [dynamic]int) -> bool {
     return false
 }
 
+@(private="file")
 is_safe :: proc(report: [dynamic]int) -> bool {
     is_increase := false;
 
