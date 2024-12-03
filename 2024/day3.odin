@@ -17,7 +17,6 @@ main :: proc() {
     defer delete(byte_data, context.allocator)
     data := string(byte_data)
 
-    safe_count := 0;
     array: [dynamic]int
     defer delete(array)
 
